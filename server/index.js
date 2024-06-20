@@ -23,8 +23,6 @@ const io = require("socket.io")(httpServer, {
 });
 
 
-let count=0
-
 app.use(bodyParser.urlencoded({extended:false}))
 
 io.on('connection',(socket)=>{
@@ -35,23 +33,14 @@ io.on('connection',(socket)=>{
 })
 
 async function test(instruction) {
-  count++
    await appendFile(
-            join(`/home/club/repos/car_server/server/instruction.txt`),
+            join(`./instruction.txt`),
             instruction,
             {
                 encoding: 'utf-8',
                 flag: 'w',
             },
         );
-        await appendFile(
-          join(`/home/club/repos/car_server/server/count.txt`),
-           count.toString(),
-          {
-              encoding: 'utf-8',
-              flag: 'w',
-          },
-      );
 }
 
 

@@ -2,9 +2,11 @@ import serial
 import time
 import json
 import os
-
+from dotenv import load_dotenv
+load_dotenv()
+serial_port=os.getenv('Arduino_PORT')
 # Serial port initialization
-ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser = serial.Serial(serial_port, 9600, timeout=1)
 
 # Constants for command execution
 COMMAND_MAP = {
@@ -15,8 +17,7 @@ COMMAND_MAP = {
 }
 
 # File paths
-INSTRUCTION_PATH = '/home/club/repos/car_server/server/instruction.txt'
-Count_path='/home/club/repos/car_server/server/count.txt'
+INSTRUCTION_PATH = './instruction.txt'
 # Function to read instruction from file
 def read_file(path):
     try:
