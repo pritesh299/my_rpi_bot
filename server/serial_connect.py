@@ -48,7 +48,7 @@ def main():
                 control(instruction)
             else:
                 print("No valid instruction found in file.")
-        time.sleep(0.01) 
+        time.sleep(0.1) 
 
 if __name__ == "__main__":
     main()
