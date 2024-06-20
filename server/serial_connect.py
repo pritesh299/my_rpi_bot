@@ -10,8 +10,8 @@ ser = serial.Serial(serial_port, 9600, timeout=1)
 
 # Constants for command execution
 COMMAND_MAP = {
-    'w': {'command': b'1', 'repeat': 10},
-    's': {'command': b'2', 'repeat': 10},
+    'w': {'command': b'1', 'repeat': 4},
+    's': {'command': b'2', 'repeat': 4},
     'a': {'command': b'3', 'repeat': 4},
     'd': {'command': b'1', 'repeat': 4}
 }
@@ -30,7 +30,9 @@ def control(data):
     command_info = COMMAND_MAP.get(data)
     if command_info:
         command = command_info['command']
-        ser.write(command)
+        for i in range(command_info['repeat'])
+         ser.write(command)
+         time.sleep(0.001)
     else:
         print(f"Unknown command: {data}")
 
