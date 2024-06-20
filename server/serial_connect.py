@@ -30,7 +30,7 @@ def control(data):
     command_info = COMMAND_MAP.get(data)
     if command_info:
         command = command_info['command']
-        for i in range(command_info['repeat'])
+        for i in range(command_info['repeat']):
          ser.write(command)
          time.sleep(0.001)
     else:
