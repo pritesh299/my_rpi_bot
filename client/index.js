@@ -17,3 +17,9 @@ socket.on('connect',()=>{
 
 })
 
+
+const videoElement = document.getElementById('video-feed');
+
+socket.on('videoStream', (image) => {
+    videoElement.src = 'data:image/jpeg;base64,' + image;
+});

@@ -4,6 +4,8 @@ const {createServer} =require('http')
 const { Server} =require('socket.io')
 const bodyParser=require('body-parser')
 const {SerialPort} =require('serialport');
+const { exec } = require('child_process');
+
 const dotenv=require('dotenv').config()
 const app = express();
 const corsOptions={
@@ -12,12 +14,7 @@ const corsOptions={
    methods:['GET','POST']
 }
 const httpServer= new createServer(app);
-const io = require("socket.io")(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
+const io = require("socket.io")(httpServer, corsOptions);
 
 app.use(bodyParser.urlencoded({extended:false}))
 /* 
@@ -44,6 +41,17 @@ io.on('connection',(socket)=>{
 
 })
 
+function captureAndStream() {
+  exec('fswebcam -', (error, stdout, stderr) => {
+      if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+      }
+      // Emit captured image as base64 encoded string
+      io.emit('videoStream', Buffer.from(stdout).toString('base64'));
+  });
+}
 
-const port=8000;
+setInterval(captureAndStream, 1000/24);
+const port=800;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
