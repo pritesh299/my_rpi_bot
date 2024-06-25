@@ -8,13 +8,14 @@ const { exec } = require('child_process');
 
 const dotenv=require('dotenv').config()
 const app = express();
-const corsOptions={
-   origin:'*',//change this later
-   credentials:true,
-   methods:['GET','POST']
-}
+
 const httpServer= new createServer(app);
-const io = require("socket.io")(httpServer, corsOptions);
+const io = require("socket.io")(httpServer,  {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(bodyParser.urlencoded({extended:false}))
 /* 
