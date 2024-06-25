@@ -53,5 +53,5 @@ function captureAndStream() {
 }
 
 setInterval(captureAndStream, 1000/24);
-const port=800;
+const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
