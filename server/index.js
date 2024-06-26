@@ -27,6 +27,7 @@ var opts = {
   device: false,
   callbackReturn: "location",
   verbose: false,
+  callbackReturn: "base64"
 }
 
 
