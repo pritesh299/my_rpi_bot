@@ -65,8 +65,7 @@ function streamVideo(){
       io.emit('videoStream',base64Image)
     }
   } );
-
 }
-
+setInterval(streamVideo,1000/24)
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));

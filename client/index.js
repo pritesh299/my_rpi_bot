@@ -22,6 +22,6 @@ socket.on('connect',()=>{
 const videoElement = document.getElementById('video-feed');
 
 socket.on('videoStream', (image) => {
-    console.log(image)
+     videoElement.scr=image
 });
 
