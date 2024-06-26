@@ -6,7 +6,6 @@ const bodyParser=require('body-parser')
 const {SerialPort} =require('serialport');
 const fs = require('node:fs');
 const NodeWebcam  =require("node-webcam") 
-const sharp = require('sharp');
 const dotenv=require('dotenv').config()
 const { ExpressPeerServer } = require("peer");
 const app = express();
@@ -45,7 +44,7 @@ const Webcam= NodeWebcam.create(opts)
 
 
 
-const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) */
+const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) 
 io.on('connection',(socket)=>{
   console.log('connected')
  socket.on('join-room',(receiverPeerId)=>{
@@ -83,7 +82,7 @@ io.on('connection',(socket)=>{
 }
 setInterval(streamVideo,42) */
 
-httpServer.get('/video',(req,res)=>{
+app.get('/video',(req,res)=>{
   res.render('index')
 })
 const port=8000;
