@@ -16,14 +16,30 @@ const io = require("socket.io")(httpServer,  {
     methods: ["GET", "POST"]
   }
 });
+var opts = {
+  width: 1280,
+  height: 720,
+  quality: 100,
+  frames: 60,
+  delay: 0,
+  saveShots: true,
+  output: "jpeg",
+  device: false,
+  callbackReturn: "location",
+  verbose: false,
+   callbackReturn: "base64"
+}
+
 
 app.use(bodyParser.urlencoded({extended:false}))
+const Webcam= NodeWebcam.create(opts)
+
+
 /* 
 const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) */
 io.on('connection',(socket)=>{
   console.log('connected')
  
-  
 
   /* socket.on('control',(a)=>{
     if(a==='w'){
@@ -41,8 +57,17 @@ io.on('connection',(socket)=>{
   }) */
 
 })
+function streamVideo(){
+  Webcam.capture( "test_picture", ( err, data )=>{
+    if(err){
+      console.log('Error'+err)
+    }else{
+      console.log(data)
 
-const Webcam= NodeWebcam.create()
-Webcam.capture( "test_picture", ( err, data )=>{console.log(data)} );
+    }
+  } );
+
+}
+
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
