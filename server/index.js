@@ -58,12 +58,11 @@ io.on('connection',(socket)=>{
 
 })
 function streamVideo(){
-  Webcam.capture( "test_picture", ( err, data )=>{
+  Webcam.capture( "test_picture", ( err, base64Image )=>{
     if(err){
       console.log('Error'+err)
     }else{
-      console.log(data)
-
+      io.emit('videoStream',base64Image)
     }
   } );
 
