@@ -40,17 +40,23 @@ debug: true,
 app.use("/peerjs", peerServer);
 app.use(bodyParser.urlencoded({extended:false}))
 const Webcam= NodeWebcam.create(opts)
-
+const reciversList=[]
 
 
 
 const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) 
 io.on('connection',(socket)=>{
+  let video_server_id=null
   console.log('connected')
+  socket.on('server-connect',(id)=>{video_server_id=id})
+  socket.to(video_server_id).broadcast.emit('dummy','ahnf')
   socket.on('join-room',(receiverPeerId)=>{
   console.log('target joning room with id:',receiverPeerId )
-  socket.emit('stream',receiverPeerId)
- })
+  if(video_server_id!==null){
+  socket.to(video_server_id).broadcast.emit('video-server',receiverPeerId);
+  }
+  })
+ 
 
    socket.on('control',(a)=>{
     if(a==='w'){
@@ -83,7 +89,7 @@ io.on('connection',(socket)=>{
 setInterval(streamVideo,42) */
 
 app.get('/',(req,res)=>{
-  res.render('index.js')
+  res.render('index.ejs')
 })
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));

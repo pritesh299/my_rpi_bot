@@ -17,12 +17,11 @@ socket.on('connect',()=>{
            socket.emit('control',control)
         }
    })
-
+   socket.on('video-stream',(targetId)=>{    console.log('streaming to reciver with id:',targetId)})
     peer.on('open', function(id) {
       socket.emit("join-room", id);
       console.log('joined room with id:',id)
     });
-
     peer.on('call', function(call) {
       call.on('stream', function(remoteStream) {
         videoConatiner.src=remoteStream

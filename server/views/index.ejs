@@ -13,26 +13,20 @@
 <script type="module">
 import io from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js'
 const socket= io('localhost:8000')
-const peer = new Peer();
+const videoConatiner=document.getElementById('video')
 
+const peer = new Peer();
+  
 socket.on('connect',()=>{
     console.log("connect",socket.id)
-    peer.on('open', function(id) {
-      console.log(' sender joined server with id:',id)
-    });
-    socket.on('stream',(targetId)=>{
-        console.log('streaming to reciver with id:',targetId)
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-             navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            const call= peer.call(targetId,stream)
-        })
-        .catch(error => {
-            console.error('Error accessing the webcam', error);
-        });
-    }
-    })
- 
-}) 
+     socket.emit('server-connect',socket.id)
+     socket.on('video-stream',(targetId)=>{  consoel.log(targetId) })
+     socket.on('dummy',(data)=>{console.log(data)})
+//    socket.on('video-stream',(targetId)=>{    console.log('streaming to reciver with id:',targetId)})
+//     peer.on('open', function(id) {
+//       console.log('joined server with id:',id)
+//     });
+    
+})
 </script>
 </html>
