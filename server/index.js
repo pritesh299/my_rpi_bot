@@ -4,8 +4,8 @@ const {createServer} =require('http')
 const { Server} =require('socket.io')
 const bodyParser=require('body-parser')
 const {SerialPort} =require('serialport');
-const { exec } = require('child_process');
-
+const fs = require('node:fs');
+const NodeWebcam  =require("node-webcam") 
 const dotenv=require('dotenv').config()
 const app = express();
 
@@ -42,17 +42,7 @@ io.on('connection',(socket)=>{
 
 })
 
-function captureAndStream() {
-  exec('fswebcam -', (error, stdout, stderr) => {
-      if (error) {
-          console.error(`exec error: ${error}`);
-          return;
-      }
-      // Emit captured image as base64 encoded string
-      io.emit('videoStream', Buffer.from(stdout).toString('base64'));
-  });
-}
-
-setInterval(captureAndStream, 1000/24);
+const Webcam= NodeWebcam.create()
+Webcam.capture( "test_picture", ( err, data )=>{console.log(data)} );
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
