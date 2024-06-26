@@ -6,23 +6,22 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>Sending Video Stream</h1>
 </body>
 
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script>
+<script type="module">
 import io from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js'
-const socket= io('https://localhost:8000')
-const peer = new Peer(undefined, {
-path: "/peerjs",
-host: "/",
-port: "3030",
-});
+const socket= io('localhost:8000')
+const peer = new Peer();
 
 socket.on('connect',()=>{
     console.log("connect",socket.id)
-    
+    peer.on('open', function(id) {
+      console.log(' sender joined server with id:',id)
+    });
     socket.on('stream',(targetId)=>{
+        console.log('streaming to reciver with id:',targetId)
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
              navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {

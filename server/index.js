@@ -47,9 +47,9 @@ const Webcam= NodeWebcam.create(opts)
 const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) 
 io.on('connection',(socket)=>{
   console.log('connected')
- socket.on('join-room',(receiverPeerId)=>{
+  socket.on('join-room',(receiverPeerId)=>{
   console.log('target joning room with id:',receiverPeerId )
-    socket.emit('stream',receiverPeerId)
+  socket.emit('stream',receiverPeerId)
  })
 
    socket.on('control',(a)=>{
@@ -82,8 +82,8 @@ io.on('connection',(socket)=>{
 }
 setInterval(streamVideo,42) */
 
-app.get('/video',(req,res)=>{
-  res.render('index')
+app.get('/',(req,res)=>{
+  res.render('index.js')
 })
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
