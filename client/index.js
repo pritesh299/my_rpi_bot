@@ -16,6 +16,7 @@ socket.on('connect',()=>{
         }
    })
    socket.on('videoStream',async (image) => {
+    console.log(image)
        videoElement.src= await image
 
    });

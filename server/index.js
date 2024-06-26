@@ -6,6 +6,7 @@ const bodyParser=require('body-parser')
 const {SerialPort} =require('serialport');
 const fs = require('node:fs');
 const NodeWebcam  =require("node-webcam") 
+const sharp = require('sharp');
 const dotenv=require('dotenv').config()
 const app = express();
 
@@ -58,14 +59,18 @@ io.on('connection',(socket)=>{
 
 })
 function streamVideo(){
-  Webcam.capture( "test_picture", ( err, ImageData )=>{
+  Webcam.capture( "input", async ( err, ImageData )=>{
     if(err){
       console.log('Error'+err)
     }else{
-      io.emit('videoStream',ImageData.t)
+      const buffer = Buffer.from(ImageData, 'base64');
+      const compressedImage = await sharp(buffer).jpeg({ quality: 50 }).toBuffer();
+      const compressedBase64Image = compressedImage.toString('base64');
+      io.emit('videoStream',compressedBase64Image)
     }
   } );
 }
-setInterval(streamVideo,1000)
+
+setInterval(streamVideo,42)
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));
