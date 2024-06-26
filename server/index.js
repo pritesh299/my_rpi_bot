@@ -8,7 +8,9 @@ const fs = require('node:fs');
 const NodeWebcam  =require("node-webcam") 
 const sharp = require('sharp');
 const dotenv=require('dotenv').config()
+const { ExpressPeerServer } = require("peer");
 const app = express();
+const roomId='streamVideo'
 
 const httpServer= new createServer(app);
 const io = require("socket.io")(httpServer,  {
@@ -30,19 +32,28 @@ var opts = {
   verbose: false,
   callbackReturn: "base64"
 }
+const peerServer = ExpressPeerServer(httpServer, {
+debug: true,
+});
 
 
+
+app.use("/peerjs", peerServer);
 app.use(bodyParser.urlencoded({extended:false}))
 const Webcam= NodeWebcam.create(opts)
 
 
-/* 
+
+
 const serial_port= new SerialPort({path:process.env.Arduino_PORT,baudRate:9600}) */
 io.on('connection',(socket)=>{
   console.log('connected')
- 
+ socket.on('join-room',(receiverPeerId)=>{
+  console.log('target joning room with id:',receiverPeerId )
+    socket.emit('stream',receiverPeerId)
+ })
 
-  /* socket.on('control',(a)=>{
+   socket.on('control',(a)=>{
     if(a==='w'){
       serial_port.write('1')
     }
@@ -55,10 +66,10 @@ io.on('connection',(socket)=>{
     else if(a==='d'){
           serial_port.write('4')
     }    
-  }) */
+  }) 
 
 })
-function streamVideo(){
+/* function streamVideo(){
   Webcam.capture( "input", async ( err, ImageData )=>{
     if(err){
       console.log('Error'+err)
@@ -70,7 +81,10 @@ function streamVideo(){
     }
   } );
 }
+setInterval(streamVideo,42) */
 
-setInterval(streamVideo,42)
+httpServer.get('/video',(req,res)=>{
+  res.render('index')
+})
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));

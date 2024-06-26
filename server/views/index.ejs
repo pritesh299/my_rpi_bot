@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+import io from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js'
+const socket= io('https://localhost:8000')
+const peer = new Peer(undefined, {
+path: "/peerjs",
+host: "/",
+port: "3030",
+});
+
+socket.on('connect',()=>{
+    console.log("connect",socket.id)
+    
+    socket.on('stream',(targetId)=>{
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+             navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            const call= peer.call(targetId,stream)
+        })
+        .catch(error => {
+            console.error('Error accessing the webcam', error);
+        });
+    }
+    })
+ 
+}) 
+</script>
+</html>

@@ -1,11 +1,18 @@
 import io from 'https://cdn.socket.io/4.7.5/socket.io.esm.min.js'
 import { environment } from './environment.js'
+
+
 const socket= io(environment.server_url)
-let connected=false
+const videoConatiner=document.getElementById('video')
+
 let control=''
-const videoElement = document.getElementById('video-feed');
-let count =0
-let imageSrc=''
+const peer = new Peer(undefined, {
+  path: "/peerjs",
+  host: "/",
+  port: "3030",
+  });
+  
+
 socket.on('connect',()=>{
     console.log("connect",socket.id)
     connected=true
@@ -15,14 +22,18 @@ socket.on('connect',()=>{
            socket.emit('control',control)
         }
    })
-   socket.on('videoStream',async (image) => {
-    console.log(image)
-       videoElement.src= await image
 
-   });
+    peer.on('open', function(id) {
+      socket.emit("join-room", id);
+    });
 
+    peer.on('call', function(call) {
+      call.on('stream', function(remoteStream) {
+        videoConatiner.src=remoteStream
+        videoConatiner.addEventListener("loadedmetadata", () => {
+          videoConatiner.play();
+      });
+    })
+   
+}) 
 })
-
-
-
-
