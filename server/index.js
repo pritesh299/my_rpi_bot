@@ -27,7 +27,6 @@ var opts = {
   device: false,
   callbackReturn: "location",
   verbose: false,
-   callbackReturn: "base64"
 }
 
 
@@ -58,14 +57,14 @@ io.on('connection',(socket)=>{
 
 })
 function streamVideo(){
-  Webcam.capture( "test_picture", ( err, base64Image )=>{
+  Webcam.capture( "test_picture", ( err, ImageData )=>{
     if(err){
       console.log('Error'+err)
     }else{
-      io.emit('videoStream',base64Image)
+      io.emit('videoStream',ImageData.t)
     }
   } );
 }
-setInterval(streamVideo,1000/24)
+setInterval(streamVideo,1000)
 const port=8000;
 httpServer.listen(port, () => console.log(`Server is listening on PORT ${port}`));

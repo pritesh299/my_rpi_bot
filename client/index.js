@@ -3,8 +3,9 @@ import { environment } from './environment.js'
 const socket= io(environment.server_url)
 let connected=false
 let control=''
-
-
+const videoElement = document.getElementById('video-feed');
+let count =0
+let imageSrc=''
 socket.on('connect',()=>{
     console.log("connect",socket.id)
     connected=true
@@ -14,14 +15,13 @@ socket.on('connect',()=>{
            socket.emit('control',control)
         }
    })
+   socket.on('videoStream',async (image) => {
+       videoElement.src= await image
 
+   });
 
 })
 
 
-const videoElement = document.getElementById('video-feed');
 
-socket.on('videoStream', (image) => {
-     videoElement.scr=image
-});
 
